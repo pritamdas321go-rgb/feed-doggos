@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>For Prapti 🐾☕</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #fff7ed;
+            color: #431407;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            overflow-x: hidden;
+        }
+
+        #site-container {
+            width: 100%;
+            max-width: 520px;
+            background: #ffffff;
+            border: 3px solid #fdba74;
+            border-radius: 28px;
+            box-shadow: 0 16px 36px rgba(234, 88, 12, 0.15);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+        }
+
+        /* Top HUD */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffedd5;
+            border-radius: 16px;
+            padding: 10px 16px;
+            font-weight: 800;
+            color: #c2410c;
+        }
+
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.05rem;
+        }
+
+        /* Customer Dining Area */
+        .cafe-floor {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            min-height: 160px;
+            background: #fffbeb;
+            border: 2px dashed #fcd34d;
+            border-radius: 20px;
+            padding: 12px;
+        }
+
+        .table-seat {
+            background: #ffffff;
+            border: 2px solid #fed7aa;
+            border-radius: 16px;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: transform 0.15s ease;
+        }
+
+        .table-seat.empty {
+            opacity: 0.4;
+            border-style: dashed;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #9a3412;
+            font-weight: bold;
+        }
+
+        .dog-avatar {
+            font-size: 2.2rem;
+            animation: bounce 0.6s infinite alternate ease-in-out;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-4px); }
+        }
+
+        .order-bubble {
+            background: #ffedd5;
+            border: 2px solid #ea580c;
+            border-radius: 12px;
+            padding: 4px 8px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .patience-bar {
+            width: 100%;
+            height: 6px;
+            background: #fed7aa;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .patience-fill {
+            height: 100%;
+            background: #22c55e;
+            width: 100%;
+            transition: width 0.1s linear, background-color 0.3s;
+        }
+
+        /* Kitchen / Prep Station */
+        .kitchen-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #9a3412;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kitchen-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .kitchen-btn {
+            background: #ffedd5;
+            border: 2px solid #fdba74;
+            border-radius: 18px;
+            height: 75px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.1s, border-color 0.1s;
+            box-shadow: 0 4px 10px rgba(249, 115, 22, 0.15);
+        }
+
+        .kitchen-btn:active {
+            transform: scale(0.92);
+            background: #fed7aa;
+            border-color: #ea580c;
+        }
+
+        .kitchen-btn span {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #9a3412;
+            margin-top: 2px;
+        }
+
+        .combo-badge {
+            background: #ea580c;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Overlay Screens */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 247, 237, 0.97);
+            border-radius: 26px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+            z-index: 10;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .overlay h1 {
+            color: #ea580c;
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+
+        .overlay p {
+            font-size: 0.98rem;
+            color: #7c2d12;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+
+        .rules-card {
+            background: #fff;
+            border: 2px dashed #fdba74;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            text-align: left;
+            width: 100%;
+            font-size: 0.9rem;
+            color: #9a3412;
+        }
+
+        .rules-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rules-card li {
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rules-card li:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn {
+            background: #ea580c;
+            color: #ffffff;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 24px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3);
+        }
+
+        .btn:hover {
+            background: #c2410c;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="site-container">
+        <!-- Top HUD -->
+        <div class="hud">
+            <div class="hud-item">🪙 <span id="coin-count">0</span></div>
+            <div class="hud-item">
+                <span class="combo-badge" id="combo-tag">Combo x1</span>
+            </div>
+            <div class="hud-item">⏱️ <span id="time-left">30s</span></div>
+        </div>
+
+        <!-- Dining Floor -->
+        <div class="cafe-floor" id="cafe-floor"></div>
+
+        <!-- Kitchen Prep Station -->
+        <div class="kitchen-title">
+            <span>Kitchen Prep (Tap to Serve)</span>
+            <span style="font-size: 0.8rem; color: #ea580c;">Fast taps = High score!</span>
+        </div>
+        <div class="kitchen-grid">
+            <button class="kitchen-btn" onclick="serveFood('🦴')">
+                🦴
+                <span>Bone</span>
+            </button>
+            <button class="kitchen-btn" onclick="serveFood('☕')">
+                ☕
+                <span>Puppuccino</span>
+            </button>
+            <button class="kitchen-btn" onclick="serveFood('🥩')">
+                🥩
+                <span>Steak</span>
+            </button>
+            <button class="kitchen-btn" onclick="serveFood('🧁')">
+                🧁
+                <span>Pupcake</span>
+            </button>
+        </div>
+
+        <!-- Front Page / Start Screen -->
+        <div class="overlay" id="start-screen">
+            <div style="font-size: 3rem; margin-bottom: 8px;">🐕‍🦺☕</div>
+            <h1>Hey Prapti 🌸</h1>
+            <p>Here's a simple game for you! Not sure if you'll check it or play it, but if you do, I hope you'll like it :)</p>
+            
+            <div class="rules-card">
+                <ul>
+                    <li>⏱️ <strong>Time Limit:</strong> 30 seconds</li>
+                    <li>🐶 <strong>Goal:</strong> Feed as many puppies as possible before time runs out</li>
+                    <li>⚡ <strong>How to Play:</strong> Check each puppy's food order and tap the matching item in the kitchen to serve them</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="startGame()">Start Game 🐾</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="overlay" id="gameover-screen" style="display: none;">
+            <div style="font-size: 3rem; margin-bottom: 8px;">🏆</div>
+            <h1>Time's Up!</h1>
+            <p id="final-stats">You earned 0 coins and served 0 happy puppies in 30 seconds!</p>
+            <button class="btn" onclick="startGame()">Play Again 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type = 'sine', duration = 0.1, vol = 0.15) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function sfxServe() {
+            playTone(587.33, 'triangle', 0.1, 0.2);
+            setTimeout(() => playTone(880, 'triangle', 0.15, 0.2), 80);
+        }
+        function sfxMiss() { playTone(160, 'sawtooth', 0.2, 0.15); }
+        function sfxBark() {
+            playTone(320, 'sine', 0.08, 0.3);
+            setTimeout(() => playTone(400, 'sine', 0.1, 0.3), 50);
+        }
+
+        const DOG_TYPES = ['🐶', '🐕', '🦮', '🐩', '🐕‍🦺'];
+        const FOOD_TYPES = ['🦴', '☕', '🥩', '🧁'];
+        
+        let tables = [null, null, null];
+        let coins = 0;
+        let combo = 1;
+        let servedCount = 0;
+        let gameTime = 30;
+        let gameInterval = null;
+        let loopInterval = null;
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('gameover-screen').style.display = 'none';
+            
+            coins = 0;
+            combo = 1;
+            servedCount = 0;
+            gameTime = 30;
+            tables = [null, null, null];
+
+            updateHUD();
+            renderTables();
+
+            if (gameInterval) clearInterval(gameInterval);
+            if (loopInterval) clearInterval(loopInterval);
+
+            spawnDog(0);
+            setTimeout(() => spawnDog(1), 600);
+
+            gameInterval = setInterval(() => {
+                gameTime--;
+                document.getElementById('time-left').innerText = gameTime + 's';
+                if (gameTime <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            loopInterval = setInterval(gameLoop, 100);
+        }
+
+        function gameLoop() {
+            tables.forEach((dog, idx) => {
+                if (dog) {
+                    dog.patience -= 0.5 + (combo * 0.03);
+                    if (dog.patience <= 0) {
+                        tables[idx] = null;
+                        combo = 1;
+                        sfxMiss();
+                        updateHUD();
+                        renderTables();
+                    }
+                } else {
+                    if (Math.random() < 0.06) {
+                        spawnDog(idx);
+                    }
+                }
+            });
+            renderPatience();
+        }
+
+        function spawnDog(slotIndex) {
+            if (tables[slotIndex]) return;
+            const dog = {
+                avatar: DOG_TYPES[Math.floor(Math.random() * DOG_TYPES.length)],
+                order: FOOD_TYPES[Math.floor(Math.random() * FOOD_TYPES.length)],
+                patience: 100
+            };
+            tables[slotIndex] = dog;
+            sfxBark();
+            renderTables();
+        }
+
+        function serveFood(foodItem) {
+            let targetIdx = tables.findIndex(d => d && d.order === foodItem);
+
+            if (targetIdx !== -1) {
+                const dog = tables[targetIdx];
+                const tip = Math.round(10 * (dog.patience / 100) * combo);
+                coins += 10 + tip;
+                servedCount++;
+                combo = Math.min(combo + 1, 5);
+
+                tables[targetIdx] = null;
+                sfxServe();
+                updateHUD();
+                renderTables();
+
+                setTimeout(() => spawnDog(targetIdx), 500 + Math.random() * 800);
+            } else {
+                combo = 1;
+                sfxMiss();
+                updateHUD();
+            }
+        }
+
+        function renderTables() {
+            const floor = document.getElementById('cafe-floor');
+            floor.innerHTML = '';
+
+            tables.forEach((dog, idx) => {
+                const seat = document.createElement('div');
+                if (dog) {
+                    seat.className = 'table-seat';
+                    seat.innerHTML = `
+                        <div class="order-bubble">${dog.order}</div>
+                        <div class="dog-avatar">${dog.avatar}</div>
+                        <div class="patience-bar">
+                            <div class="patience-fill" id="patience-${idx}" style="width: ${dog.patience}%"></div>
+                        </div>
+                    `;
+                } else {
+                    seat.className = 'table-seat empty';
+                    seat.innerHTML = `<span>Seat ${idx + 1}<br>Waiting...</span>`;
+                }
+                floor.appendChild(seat);
+            });
+        }
+
+        function renderPatience() {
+            tables.forEach((dog, idx) => {
+                if (dog) {
+                    const fill = document.getElementById(`patience-${idx}`);
+                    if (fill) {
+                        fill.style.width = dog.patience + '%';
+                        if (dog.patience < 30) {
+                            fill.style.backgroundColor = '#ef4444';
+                        } else if (dog.patience < 60) {
+                            fill.style.backgroundColor = '#f59e0b';
+                        } else {
+                            fill.style.backgroundColor = '#22c55e';
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateHUD() {
+            document.getElementById('coin-count').innerText = coins;
+            document.getElementById('combo-tag').innerText = `Combo x${combo}`;
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            clearInterval(loopInterval);
+
+            document.getElementById('final-stats').innerHTML = `
+                You earned <strong>${coins} 🪙 coins</strong><br>
+                and fed <strong>${servedCount} 🐶 puppies</strong> in 30 seconds!
+            `;
+            document.getElementById('gameover-screen').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
